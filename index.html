@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title> New Lab City </title>
+    <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous"></script>
+    <script src="semantic/dist/semantic.min.js"></script>
+    <style>
+      hr {
+        border: none;
+        height: 3px;
+        color: black;
+        background-color: black;
+      }
+
+      .ui.vertical.buttons .button {
+        text-align: left;
+      }
+
+      path {
+          stroke: steelblue;
+          stroke-width: 2;
+          fill: none;
+      }
+
+      .axis path,
+      .axis line {
+          fill: none;
+          stroke: grey;
+          stroke-width: 1;
+          shape-rendering: crispEdges;
+      }
+
+      @media only screen and (max-width: 767px) {
+      .ui.stackable.divided:not(.vertically).grid>.column:not(.row) {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+
+}
+
+
+    </style>
+  </head>
+  <body>
+    <div class="ui container">
+      <div class="ui one column padded grid">
+        <div class="column">
+          <div class="ui text stackable menu">
+            <div class="header item">
+             <h3> New Lab City: Sensor Data </h3>
+            </div>
+            <div class="right menu">
+              <a class="item">Get Involved</a>
+              <a class="item">Contact</a>
+              <a class="item">New Lab</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="ui two column padded grid">
+        <div class="column">
+          <div class="ui items stackable">
+            <div class="content">
+              <h2 class="header">SENSOR DATA MICROSITE</h2>
+              <div class="meta JSON"> LAST UPDATED DATE </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="column">
+          <h2 class="ui right aligned basic segment">DATE</h2>
+        </div>
+      </div>
+
+      <div class="ui two column padded divided stackable grid">
+
+        <div class="six wide column">
+          <h3>Sensor Box</h3>
+            <div class="ui basic segment">
+              <button class="ui basic left button">
+                <i class="square icon"></i>
+                Prototype Sensor Box
+              </button>
+              <div class="ui divider"></div>
+              <div class="ui horizontal segments">
+                <div class="ui basic segment" id="menu">
+                  <h5>Included Sensors</h5>
+                  <div class="ui vertical small left aligned buttons body">
+
+                  </div>
+
+
+                </div>
+                <div class="ui basic segment">
+                  <h5>Sensor Description</h5>
+
+                  Rate: 4PS
+                </div>
+              </div>
+            </div>
+
+        </div>
+        <div class="ten wide column">
+
+          <h3>Data</h3>
+          <div class="data"></div>
+          <script>
+
+// Set the dimensions of the canvas / graph
+var margin = {top: 30, right: 20, bottom: 30, left: 50},
+    width = 600 - margin.left - margin.right,
+    height = 270 - margin.top - margin.bottom;
+
+// Parse the date / time
+var parseDate = d3.time.format("%d-%b-%y").parse;
+
+// Set the ranges
+var x = d3.time.scale().range([0, width]);
+var y = d3.scale.linear().range([height, 0]);
+
+// Define the axes
+var xAxis = d3.svg.axis().scale(x)
+    .orient("bottom").ticks(5);
+
+var yAxis = d3.svg.axis().scale(y)
+    .orient("left").ticks(5);
+
+// Define the line
+var valueline = d3.svg.line()
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.close); });
+
+// Adds the svg canvas
+var svg = d3.select(".data")
+    .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+
+// Get the data
+d3.csv("data.csv", function(error, data) {
+    data.forEach(function(d) {
+        d.date = parseDate(d.date);
+        d.close = +d.close;
+    });
+
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d) { return d.date; }));
+    y.domain([0, d3.max(data, function(d) { return d.close; })]);
+
+    // Add the valueline path.
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", valueline(data));
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+});
+
+</script>
+        </div>
+
+    </div>
+
+<hr>
+
+      <div class="ui one column padded grid">
+        <div class="column">
+          <div class="ui text menu">
+            <div class="header item">
+             <h5> New Labs 2017</h5>
+            </div>
+            <div class="left mini menu">
+              <a class="item">Terms</a>
+              <a class="item">Privacy</a>
+              <a class="item">Security</a>
+              <a class="item">Contact</a>
+            </div>
+          </div>
+        </div>
+      </div>
+<script>
+
+    $(function() {
+
+
+   var menu = [];
+
+   $.getJSON('menu.json', function(data) {
+       $.each(data.menu, function(i, f) {
+          var mnuLst = "<button class='ui basic button'>" + "<i class='square icon'></i>" + f.title + "</button>"
+           $(mnuLst).appendTo("#menu .body");
+     });
+
+   });
+
+});
+</script>
+  </body>
+</html>
