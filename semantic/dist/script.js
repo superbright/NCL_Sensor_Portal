@@ -5,15 +5,26 @@
 
    var menu = [];
 
-   $.getJSON('menu.json', function(data) {
+   $.getJSON('new-menu.json', function(data) {
        $.each(data.menu, function(i, f) {
-          var mnuLst = "<button class='ui basic button'>" + "<i class='square icon'></i>" + f.title + "</button>"
+          var mnuLst = "<button class='ui basic button'" + " id='" + i + "'>" + "<i class='square icon'></i>" + f.title + "</button>"
            $(mnuLst).appendTo("#menu .body");
+           $(document).ready(function(){
+              $("#" + i).click(function(){
+
+                $('#description').text(f.desc);
+              });
+            });
+
+
+
      });
 
    });
 
 });
+
+
 
 
 // D3.JS Script
