@@ -1,0 +1,26 @@
+{
+  "menu" : [
+  {
+    "title" : "Vehicular Traffic",
+    "dataurl" : "xxx",
+    "desc" : "Rate: 4FPS"
+  },
+  {
+    "title" : "Pedestrian Traffic",
+    "dataurl" : "xxx",
+    "desc" : "Rate: 5FPS"
+  },
+
+  {
+    "title" : "Sound Levels",
+    "dataurl" : "xxx",
+    "desc" : "Rate: 6FPS"
+  },
+  {
+    "title": "Air Quality",
+    "dataurl" : "xxx",
+    "desc" : "Rate: 7FPS"
+  }
+
+  ]
+}
