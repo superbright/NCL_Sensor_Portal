@@ -1,6 +1,6 @@
 // Loading the JSON
 
-    $(function() {
+$(function() {
 
 
    var menu = [];
@@ -13,69 +13,108 @@
 
    });
 
+  // ############## initialize data
+  var t = -1,
+  n = 40,
+  duration = 750,
+  data = [];
+
+  // ############## initizalize socket connections
+
+  var socket = io('http://localhost:3000');
+  socket.on('data1', function(msg){
+
+      //add data to the queue
+      data.push({
+       time: ++t,
+       value: parseInt(msg.data)/10
+     })
+
+     tick();
+  });
+
+  // ############## initialize GRAPH
+
+  // Set the dimensions of the canvas / graph
+  var margin = {top: 30, right: 20, bottom: 30, left: 50},
+      width = 600 - margin.left - margin.right,
+      height = 270 - margin.top - margin.bottom;
+
+  var n = 40,
+    random = d3.randomNormal(0, .2),
+    data = d3.range(n).map(random);
+    // Adds the svg canvas
+    var svg = d3.select(".data")
+        .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
+
+
+var x = d3.scaleLinear()
+    .domain([0, n - 1])
+    .range([0, width]);
+var y = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([height, 0]);
+var line = d3.line()
+    .x(function(d, i) { return x(i); })
+    .y(function(d, i) { return y(d); });
+
+svg.append("defs").append("clipPath")
+  .attr("id", "clip")
+  .append("rect")
+  .attr("width", width)
+  .attr("height", height);
+
+var xAxis = d3.axisBottom(10).tickFormat(function(d){ return d.x;});
+var widthScale = d3.scaleLinear()
+    .domain([0, 120])
+    .range([0, width]);
+var axis = d3.axisLeft()
+    .scale(widthScale);
+
+var path = svg.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .data([data])
+  .attr("class", "line");
+
+
+function tick() {
+//  console.log(data.length);
+  // update the domains
+  x.domain([t - n + 2, t]);
+
+  // redraw the line
+  svg.select(".line")
+    .attr("d", line)
+    .attr("transform", null);
+
+  // slide the x-axis left
+  axis.transition()
+    .duration(duration)
+    .ease("linear")
+    .call(x.axis);
+
+  // slide the line left
+  path.transition()
+    .duration(duration)
+    .ease("linear")
+    .attr("transform", "translate(" + x(t - n) + ")");
+
+  // pop the old data point off the front
+  if (data.length > 20) data.shift();
+
+}
+
+
 });
 
 
 // D3.JS Script
 
-// Set the dimensions of the canvas / graph
-var margin = {top: 30, right: 20, bottom: 30, left: 50},
-    width = 600 - margin.left - margin.right,
-    height = 270 - margin.top - margin.bottom;
-
 // Parse the date / time
-var parseDate = d3.time.format("%d-%b-%y").parse;
-
-// Set the ranges
-var x = d3.time.scale().range([0, width]);
-var y = d3.scale.linear().range([height, 0]);
-
-// Define the axes
-var xAxis = d3.svg.axis().scale(x)
-    .orient("bottom").ticks(5);
-
-var yAxis = d3.svg.axis().scale(y)
-    .orient("left").ticks(5);
-
-// Define the line
-var valueline = d3.svg.line()
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.close); });
-
-// Adds the svg canvas
-var svg = d3.select(".data")
-    .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-        .attr("transform",
-              "translate(" + margin.left + "," + margin.top + ")");
-
-// Get the data
-d3.csv("data.csv", function(error, data) {
-    data.forEach(function(d) {
-        d.date = parseDate(d.date);
-        d.close = +d.close;
-    });
-
-    // Scale the range of the data
-    x.domain(d3.extent(data, function(d) { return d.date; }));
-    y.domain([0, d3.max(data, function(d) { return d.close; })]);
-
-    // Add the valueline path.
-    svg.append("path")
-        .attr("class", "line")
-        .attr("d", valueline(data));
-
-    // Add the X Axis
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
-    // Add the Y Axis
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-
-});
+//var parseDate = d3.time.format("%d-%b-%y").parse;
