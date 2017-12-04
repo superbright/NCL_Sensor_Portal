@@ -3,15 +3,27 @@
   <head>
     <title> New Lab City </title>
     <link rel="stylesheet" type="text/css" href="semantic/dist/semantic.min.css">
-    <script src="http://d3js.org/d3.v4.min.js"></script>
-    <script
-      src="https://code.jquery.com/jquery-3.1.1.min.js"
-      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
-      crossorigin="anonymous"></script>
+    <script src="http://d3js.org/d3.v3.js" charset="utf-8"></script>
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="semantic/dist/semantic.min.js"></script>
+    <script src="semantic/dist/epoch.js"></script>
+    <link rel="stylesheet" type="text/css" href="epoch.min.css">
 
     <style>
+    body {
+    font-family: helvetica;
+}
+
+/* Default test chart height of 220px. */
+.test .epoch {
+    height: 220px;
+    overflow: hidden;
+}
+
+.broken {
+    color: red;
+}
 
       hr {
         border: none;
@@ -120,9 +132,15 @@
 
         </div>
         <div class="ten wide column">
-
+        <script>
+        </script>
           <h3>Data</h3>
-          <div class="data"></div>
+<!--           <div class="data" id="graph1"></div> -->
+	<div id="test-3" class="test">
+  	<div class="epoch"></div>
+
+	</div>
+
         </div>
 
     </div>
