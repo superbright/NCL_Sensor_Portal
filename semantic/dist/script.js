@@ -77,7 +77,7 @@ function tick() {
             };
 
             pushPoint();
-            interval = setInterval(pushPoint, 1000);
+            interval = setInterval(pushPoint, 100);
 
         };
 
