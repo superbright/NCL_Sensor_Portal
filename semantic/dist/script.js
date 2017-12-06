@@ -32,6 +32,30 @@ return days[d.getDay()]+' '+months[d.getMonth()]+' '+d.getDate()+' '+d.getFullYe
    });
 
 
+var reset = function() {
+//   socket.removeAllListeners("data1");
+
+  data = [{ label: 'A', values: [] }
+    ],
+    length = 40,
+    nextIndex = length,
+    playing = true,
+    interval = null;
+
+		$('#test-3').empty().append("<div class='epoch'></div>");
+   chart = $('#test-3 .epoch').epoch({
+    type: 'time.line',
+    data: data,
+    axes: ['left', 'bottom']
+  });
+
+  // And this is required to see the updated styles...
+  chart.redraw();
+}
+//end socket
+
+
+
   var t = -1,
   n = 40,
   duration = 750;
@@ -72,32 +96,7 @@ var pushPoint = function(val) {
     // console.log(msg.data)
 });
 
- var canvas = document.querySelector("canvas");
-  canvas.setAttribute("id", "test1");
 
-  var context = canvas.getContext('2d');
-
-var reset = function() {
-  // socket.removeAllListeners("data1");
-
-  data = [{ label: 'A', values: [] }
-    ],
-    length = 40,
-    nextIndex = length,
-    playing = true,
-    interval = null;
-
-		$('#test-3').empty().append("<div class='epoch'></div>");
-   chart = $('#test-3 .epoch').epoch({
-    type: 'time.line',
-    data: data,
-    axes: ['left', 'bottom']
-  });
-
-  // And this is required to see the updated styles...
-  chart.redraw();
-}
-//end socket
 
   // ############## initizalize socket connections
 
