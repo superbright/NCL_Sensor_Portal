@@ -133,7 +133,7 @@ $(function() {
         };
 
         // ############## initizalize socket connections
-        var socket = io('http://localhost:3000');
+        var socket = io('http://165.227.188.161:3000');
         socket.on('data1', function(msg) {
             pushPoint(msg.data);
         });
