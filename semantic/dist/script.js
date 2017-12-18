@@ -44,6 +44,10 @@ $(function() {
 
     $.getJSON('new-menu.json', function(data) {
         $.each(data.menu, function(i, f) {
+
+            if(i == 0) {
+              $('#headertitle').text("DATA: " + f.title);
+            }
             var mnuLst = "<button class='ui basic button '" +
             " id='" + i + "'>" + "<i class='square icon'></i>" + f.title + "</button>"
             $(mnuLst).appendTo("#menu .body");
@@ -52,6 +56,7 @@ $(function() {
                     reset(i);
 
                     $('#description').text(f.desc);
+                    $('#headertitle').text("DATA: " + f.title);
                 });
 
             });
@@ -84,7 +89,7 @@ $(function() {
             // And this is required to see the updated styles...
             chart.redraw();
             console.log('data' + id);
-            socket.on('data' + id, function(msg) {
+            socket.on('data' + (id +1), function(msg) {
                 pushPoint(msg.data);
             });
         } // end reset
