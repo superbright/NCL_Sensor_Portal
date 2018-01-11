@@ -75,7 +75,7 @@ $(function() {
         });
 
         //kick off data
-        socket = io('http://27.0.0.1:3000');
+        socket = io('http://127.0.0.1:3000');
         currentBaseData = data.menu[0].basedata;
         socket.on(data.menu[0].dataurl, function(msg) {
             console.log(msg);
