@@ -40,6 +40,14 @@ $(function() {
         return days[d.getDay()] + ' ' + months[d.getMonth()] + ' ' + d.getDate() + ' ' + d.getFullYear() + ' ' + hours + ':' + minutes + ampm;
     }
 
+    //all socket io operations
+    var socket;
+
+    //data fill for consistent time move
+    var intervalFunc;
+    var currentBaseData = 0;
+
+    //json loaded menu
     var menu = [];
 
     $.getJSON('new-menu.json', function(data) {
@@ -53,18 +61,37 @@ $(function() {
             $(mnuLst).appendTo("#menu .body");
             $(document).ready(function() {
                 $("#" + i).click(function() {
-                    reset(i);
+
+                    reset(i,f.dataurl);
+                    currentBaseData = f.basedata;
 
                     $('#description').text(f.desc);
                     $('#headertitle').text("DATA: " + f.title);
                 });
 
+
+
             });
         });
 
+        //kick off data
+        socket = io('http://localhost:3000');
+        currentBaseData = data.menu[0].basedata;
+        socket.on(data.menu[0].dataurl, function(msg) {
+            console.log(msg);
+            pushPoint(msg.data);
+        });
+
+        intervalFunc = setInterval(dataFillerfunc, 1000);
     });
 
-    var reset = function(id) {
+    var dataFillerfunc = function() {
+        console.log(currentBaseData);
+        pushPoint(currentBaseData);
+    }
+
+
+    var reset = function(id,dataurl) {
 
             socket.removeAllListeners();
 
@@ -88,8 +115,9 @@ $(function() {
 
             // And this is required to see the updated styles...
             chart.redraw();
-            console.log('data' + id);
-            socket.on('data' + (id +1), function(msg) {
+            //console.log(dataurl);
+            socket.on(dataurl, function(msg) {
+                 console.log(msg);
                 pushPoint(msg.data);
             });
         } // end reset
@@ -136,11 +164,5 @@ $(function() {
             nextIndex++;
 
         };
-
-        // ############## initizalize socket connections
-        var socket = io('http://165.227.188.161:3000');
-        socket.on('data1', function(msg) {
-            pushPoint(msg.data);
-        });
 
     });

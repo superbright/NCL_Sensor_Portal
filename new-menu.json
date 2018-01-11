@@ -2,13 +2,15 @@
   "menu" : [
   {
     "title" : "Sound Levels",
-    "dataurl" : "xxx",
-    "desc" : "Rate: 6FPS"
+    "dataurl" : "sensors/sound",
+    "desc" : "Rate: 6FPS",
+    "basedata" : 240
   },
   {
     "title": "Movement Detection",
-    "dataurl" : "xxx",
-    "desc" : "Rate: 5FPS"
+    "dataurl" : "sensors/pir",
+    "desc" : "Rate: 5FPS",
+    "basedata" : 0
   }
 
   ]
